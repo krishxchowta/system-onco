@@ -1,0 +1,13 @@
+{
+  "name": "system-onco",
+  "private": true,
+  "workspaces": ["web"],
+  "scripts": {
+    "dev": "node scripts/dev.mjs",
+    "dev:web": "npm run dev --workspace web",
+    "dev:api": "cd ml-pipeline && .venv/bin/python -m uvicorn api:app --host 127.0.0.1 --port 8000",
+    "build": "npm run build --workspace web",
+    "start": "npm run start --workspace web",
+    "typecheck": "npm run typecheck --workspace web"
+  }
+}
