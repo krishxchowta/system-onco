@@ -36,6 +36,17 @@ export const DATASET_REFERENCES: DatasetReference[] = [
     pipelineUse: "Classification benchmark only; incompatible with the 3D viewer",
   },
   {
+    name: "Brain Tumor MRI Dataset v1 · Mendeley Data",
+    href: "https://data.mendeley.com/datasets/zwr4ntf94j/1",
+    task: "2D four-class classification",
+    format:
+      "12,064 contrast-enhanced T1 JPEG/PNG images; 80% train / 20% test",
+    provenance:
+      "Version 1, published 11 September 2025. DOI 10.17632/zwr4ntf94j.1; contributor-supplied preprocessing and CC BY 4.0.",
+    pipelineUse:
+      "Independent classification dataset; incompatible with 3D segmentation",
+  },
+  {
     name: "Cheng brain tumor dataset · Figshare",
     href: "https://figshare.com/articles/dataset/brain_tumor_dataset/1512427",
     task: "2D tumor-type classification",
