@@ -6,7 +6,8 @@
 >
 > SYSTEM.ONCO is a local research workspace that connects multimodal 3D brain MRI, pretrained deep-learning segmentation, interactive volumetric visualization, regional Grad-CAM, physical tumor measurements, reference-mask comparison, and optional LLM-assisted reporting in one reproducible workflow.
 
-![Uploading 1.png…]()
+<img width="1672" height="941" alt="1" src="https://github.com/user-attachments/assets/91dfc39f-d170-4b4b-9933-3016aaf85155" />
+
 
 ---
 
