@@ -10,4 +10,6 @@ __pycache__/
 !.env.example
 data/
 .firecrawl/
+.sites-source/
+.sites-runtime/
 .DS_Store

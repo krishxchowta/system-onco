@@ -1,0 +1,10 @@
+.gcloudignore
+.git
+.gitignore
+.venv
+__pycache__
+*.pyc
+tests
+data/.cache
+data/raw/.cache
+data/uploads

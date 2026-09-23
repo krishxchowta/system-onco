@@ -2,7 +2,12 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Play, Pause, RotateCcw, Scan } from "lucide-react";
 import { SectionLabel } from "@/components/SectionLabel";
-import type { Study, Analysis, OverlayKind } from "@/lib/study-types";
+import {
+  backendUrl,
+  type Study,
+  type Analysis,
+  type OverlayKind,
+} from "@/lib/study-types";
 import NiivueCanvas, {
   type NiivueCanvasHandle,
   type ViewerMode,
@@ -54,13 +59,19 @@ export default function ObservationDeck({
     (value: VoxelLocation) => setLocation(value),
     [],
   );
-  const volumeUrl = `/backend/studies/${encodeURIComponent(study.id)}/volume/${sequence}`;
+  const volumeUrl = backendUrl(
+    `/backend/studies/${encodeURIComponent(study.id)}/volume/${sequence}`,
+  );
   const overlayUrl =
     overlay === "reference"
-      ? `/backend/studies/${encodeURIComponent(study.id)}/volume/reference`
+      ? backendUrl(
+          `/backend/studies/${encodeURIComponent(study.id)}/volume/reference`,
+        )
       : overlay === "none"
         ? undefined
-        : result?.assets[overlay];
+        : result?.assets[overlay]
+          ? backendUrl(result.assets[overlay])
+          : undefined;
   useEffect(() => {
     if (result) setOverlay("segmentation");
   }, [result]);

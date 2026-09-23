@@ -36,8 +36,25 @@ export type Job = {
 };
 export type OverlayKind =
   "none" | "segmentation" | "reference" | "probability" | "gradcam";
+
+const hostedBackend =
+  "https://system-onco-api-494222534318.asia-south1.run.app";
+const configuredBackend = (
+  process.env.NEXT_PUBLIC_BACKEND_URL ??
+  (process.env.NODE_ENV === "production" ? hostedBackend : "")
+).replace(/\/$/, "");
+
+export function backendUrl(path: string): string {
+  if (/^https?:\/\//i.test(path)) return path;
+  if (!configuredBackend) return path;
+  const normalized = path.startsWith("/backend/")
+    ? path.slice("/backend".length)
+    : path;
+  return `${configuredBackend}${normalized.startsWith("/") ? normalized : `/${normalized}`}`;
+}
+
 export async function api<T>(path: string, init?: RequestInit): Promise<T> {
-  const response = await fetch(path, {
+  const response = await fetch(backendUrl(path), {
     signal: AbortSignal.timeout(60000),
     ...init,
     cache: "no-store",
