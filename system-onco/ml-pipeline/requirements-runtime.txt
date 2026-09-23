@@ -4,5 +4,4 @@ nibabel==5.4.2
 numpy==2.4.6
 python-multipart==0.0.32
 scipy==1.17.1
-torch==2.14.0
 uvicorn==0.52.4

@@ -10,7 +10,8 @@ RUN apt-get update \
 
 WORKDIR /app
 COPY requirements-runtime.txt ./
-RUN pip install --no-cache-dir -r requirements-runtime.txt
+RUN pip install --no-cache-dir torch==2.14.0 --index-url https://download.pytorch.org/whl/cpu \
+    && pip install --no-cache-dir -r requirements-runtime.txt
 
 COPY api.py inference.py explainability.py ./
 COPY data/manifest.json ./data/manifest.json
