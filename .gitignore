@@ -12,4 +12,5 @@ data/
 .firecrawl/
 .sites-source/
 .sites-runtime/
+.railway-source/
 .DS_Store
