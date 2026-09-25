@@ -4,6 +4,7 @@ from pathlib import Path
 from threading import Lock
 from uuid import uuid4
 import json
+import os
 import shutil
 import time
 import numpy as np
@@ -21,11 +22,31 @@ executor = ThreadPoolExecutor(max_workers=1)
 lock = Lock()
 jobs = {}
 app = FastAPI(title='SYSTEM.ONCO', version='1.0.0')
-app.add_middleware(CORSMiddleware, allow_origins=['http://localhost:3000','http://127.0.0.1:3000'], allow_methods=['GET','POST'], allow_headers=['Content-Type'])
+origins = [origin.strip() for origin in os.getenv(
+    'CORS_ORIGINS', 'http://localhost:3000,http://127.0.0.1:3000'
+).split(',') if origin.strip()]
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_methods=['GET', 'POST'],
+    allow_headers=['Content-Type'],
+)
+
+def resolve_catalog_path(value, subject_id):
+    if not value:
+        return value
+    path = Path(value)
+    if path.exists():
+        return str(path)
+    deployed = DATA / 'raw' / 'ASNR-MICCAI-BraTS2023-GLI-Challenge-TrainingData' / subject_id / path.name
+    return str(deployed)
 
 def catalog():
     path = DATA / 'manifest.json'
     manifest = json.loads(path.read_text()) if path.exists() else {'subjects': [], 'source': {}}
+    for study in manifest['subjects']:
+        study['image'] = [resolve_catalog_path(path, study['subject_id']) for path in study['image']]
+        study['label'] = resolve_catalog_path(study.get('label'), study['subject_id'])
     uploaded = DATA / 'uploads'
     for metadata in uploaded.glob('*/study.json') if uploaded.exists() else []:
         manifest['subjects'].append(json.loads(metadata.read_text()))

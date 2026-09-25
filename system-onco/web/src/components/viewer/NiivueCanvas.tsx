@@ -85,16 +85,18 @@ const NiivueCanvas = forwardRef<NiivueCanvasHandle, Props>(
           nv.drawScene();
         },
         clip(enabled, depth, azimuth, elevation) {
-          instance.current?.setClipPlanes(
-            enabled ? [[depth, azimuth, elevation]] : [],
-          );
+          // NiiVue requires at least one plane: depth 2 is its disabled state.
+          // An empty array leaves renderer code without clipPlanes[0].
+          instance.current?.setClipPlanes([
+            enabled ? [depth, azimuth, elevation] : [2, 0, 0],
+          ]);
         },
         reset() {
           const nv = instance.current;
           if (nv) {
             nv.scene.crosshairPos = [0.5, 0.5, 0.5];
             nv.setRenderAzimuthElevation(120, 15);
-            nv.setClipPlanes([]);
+            nv.setClipPlanes([[2, 0, 0]]);
             nv.createOnLocationChange();
             nv.drawScene();
           }

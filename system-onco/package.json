@@ -7,6 +7,7 @@
     "dev:web": "npm run dev --workspace web",
     "dev:api": "cd ml-pipeline && .venv/bin/python -m uvicorn api:app --host 127.0.0.1 --port 8000",
     "build": "npm run build --workspace web",
+    "build:sites": "SITES_STATIC_EXPORT=1 npm run build --workspace web && node scripts/prepare-sites-output.mjs",
     "start": "npm run start --workspace web",
     "typecheck": "npm run typecheck --workspace web"
   }

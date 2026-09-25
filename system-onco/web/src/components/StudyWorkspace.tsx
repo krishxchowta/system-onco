@@ -12,6 +12,7 @@ import ClientObservationDeck from "./viewer/ClientObservationDeck";
 import SynthesisPanel from "./report/SynthesisPanel";
 import { api, type Study, type Job } from "@/lib/study-types";
 import { useNeuroState } from "@/lib/neuro-state";
+import { DATASET_REFERENCES } from "@/lib/dataset-catalog";
 
 type Tab = "dashboard" | "datasets" | "pipeline";
 type Health = { inference_available: boolean; device: string; model: string };
@@ -353,47 +354,49 @@ export default function StudyWorkspace() {
             </div>
             <div className="table-wrap">
               <table>
-                <caption>Dataset and model references</caption>
+                <caption>Dataset references and intended use</caption>
                 <thead>
                   <tr>
                     <th>Resource</th>
-                    <th>Use</th>
+                    <th>Task</th>
+                    <th>Format / classes</th>
+                    <th>Provenance</th>
+                    <th>Pipeline use</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {DATASET_REFERENCES.map((resource) => (
+                    <tr key={resource.href}>
+                      <td>
+                        <a
+                          target="_blank"
+                          rel="noreferrer"
+                          href={resource.href}
+                        >
+                          {resource.name} ↗
+                        </a>
+                      </td>
+                      <td>{resource.task}</td>
+                      <td>{resource.format}</td>
+                      <td>{resource.provenance}</td>
+                      <td>{resource.pipelineUse}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+            <div className="table-wrap">
+              <table>
+                <caption>Model reference</caption>
+                <thead>
+                  <tr>
+                    <th>Resource</th>
+                    <th>Architecture</th>
+                    <th>Training basis</th>
                     <th>Status</th>
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    <td>
-                      <a
-                        target="_blank"
-                        rel="noreferrer"
-                        href="https://huggingface.co/datasets/MedOtter/brats2023-gli-dataset"
-                      >
-                        BraTS 2023 · Hugging Face ↗
-                      </a>
-                    </td>
-                    <td>
-                      T1, T1c, T2, FLAIR and reference labels. Mirror lists CC
-                      BY 4.0; retain original challenge terms.
-                    </td>
-                    <td>3 samples downloaded</td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <a
-                        target="_blank"
-                        rel="noreferrer"
-                        href="https://www.kaggle.com/datasets/awsaf49/brats20-dataset-training-validation"
-                      >
-                        BraTS 2020 · Kaggle ↗
-                      </a>
-                    </td>
-                    <td>
-                      Alternative volumetric dataset; use four aligned NIfTI
-                      sequences through Upload MRI.
-                    </td>
-                    <td>Optional source · not downloaded</td>
-                  </tr>
                   <tr>
                     <td>
                       <a
@@ -405,7 +408,10 @@ export default function StudyWorkspace() {
                       </a>
                     </td>
                     <td>
-                      Pretrained 3D CNN. BraTS 2018 training. Apache 2.0 model.
+                      Pretrained 3D SegResNet CNN
+                    </td>
+                    <td>
+                      BraTS 2018 glioma segmentation · Apache 2.0 model bundle
                     </td>
                     <td>
                       {health?.inference_available

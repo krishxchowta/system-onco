@@ -1,0 +1,7 @@
+fastapi==0.141.1
+monai==1.6.0
+nibabel==5.4.2
+numpy==2.4.6
+python-multipart==0.0.32
+scipy==1.17.1
+uvicorn==0.52.4

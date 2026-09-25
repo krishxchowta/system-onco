@@ -4,7 +4,7 @@ import { ArrowUpRight } from "lucide-react";
 import { SectionLabel } from "@/components/SectionLabel";
 import { useNeuroState } from "@/lib/neuro-state";
 import { measuredReport, type ReportData } from "@/lib/report";
-import type { Analysis, Point } from "@/lib/study-types";
+import { backendUrl, type Analysis, type Point } from "@/lib/study-types";
 
 export function interactiveText(
   text: string,
@@ -58,31 +58,9 @@ export default function SynthesisPanel({
   const [notice, setNotice] = useState("");
   useEffect(() => {
     if (!result) return;
-    const controller = new AbortController();
     setReport(measuredReport(result.metrics));
     setSource("Measured summary");
     setNotice("");
-    void fetch("/api/generate-report", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ metrics: result.metrics }),
-      signal: controller.signal,
-    })
-      .then(async (response) => {
-        const body = await response.json();
-        if (!response.ok) throw new Error(body.error);
-        return body;
-      })
-      .then((body) => {
-        setReport(body.report);
-        setSource(body.source);
-        setNotice(body.notice ?? "");
-      })
-      .catch((error) => {
-        if (error.name !== "AbortError")
-          setNotice("Narrative unavailable. Showing measured summary.");
-      });
-    return () => controller.abort();
   }, [result]);
   const score = result?.metrics.confidence_score;
   return (
@@ -209,10 +187,10 @@ export default function SynthesisPanel({
       </div>
       {result && (
         <div className="result-downloads">
-          <a href={result.assets.segmentation} download>
+          <a href={backendUrl(result.assets.segmentation)} download>
             Segmentation ↓
           </a>
-          <a href={result.assets.gradcam} download>
+          <a href={backendUrl(result.assets.gradcam)} download>
             Grad-CAM ↓
           </a>
         </div>
